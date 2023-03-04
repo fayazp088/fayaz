@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useThree } from '@react-three/fiber';
 import {
   Loader,
   useGLTF,
@@ -7,6 +7,9 @@ import {
   PerspectiveCamera,
   Stars,
   Html,
+  Text3D,
+  Center,
+  Float,
 } from '@react-three/drei';
 import { Grid } from '@mui/material';
 
@@ -46,20 +49,19 @@ const Home = () => {
   return (
     <>
       <div className="bg" />
+      <span
+        style={{
+          position: 'fixed',
+          zIndex: '100',
+          top: '125px',
+          bottom: '0px',
+          width: '200px',
+          left: '550px',
+        }}
+      >
+        {View}
+      </span>
       <Canvas dpr={[1.5, 2]} linear shadows>
-        <Html as="div" fullscreen>
-          <h1>
-            Hi,
-            <span style={{ width: '300px' }}>{View}</span>
-            <br />
-            <br />
-            I'm Fayaz
-            <br />
-            <span style={{ fontSize: '0.4em' }}>Software Engineer</span>
-          </h1>
-        </Html>
-        <fog attach="fog" args={['#272730', 16, 30]} />
-        <ambientLight intensity={0.75} />
         <PerspectiveCamera makeDefault position={[0, 0, 16]} fov={75}>
           <pointLight intensity={1} position={[-10, -25, -10]} />
           <spotLight
@@ -72,22 +74,52 @@ const Home = () => {
             shadow-bias={-0.0001}
           />
         </PerspectiveCamera>
-        <Suspense fallback={null}>
-          <Model url="/scene.glb" />
-        </Suspense>
+        <ambientLight intensity={0.75} />
+        <Model url="/scene.glb" />
+        <Text3DScene />
         <OrbitControls
-          autoRotate
+          // autoRotate
+          autoRotateSpeed={0.1}
           enablePan={false}
           enableZoom={false}
           maxPolarAngle={Math.PI / 2}
           minPolarAngle={Math.PI / 2}
         />
-        <Stars radius={500} depth={50} count={1000} factor={10} />
+        <Stars radius={500} depth={50} count={5000} factor={10} />
       </Canvas>
       <div className="layer" />
       <Loader />
     </>
   );
 };
+
+function Text3DScene() {
+  return (
+    <React.Suspense fallback={null}>
+      <Center position={[0, 1, 4]}>
+        <Float floatIntensity={2} speed={1.5}>
+          <Text3D font={'/Inter_Bold.json'} bevelEnabled bevelSize={0.05}>
+            Hi, I am Fayaz
+            <meshNormalMaterial />
+          </Text3D>
+        </Float>
+      </Center>
+      <Center position={[0, -4, 7]}>
+        <Float floatIntensity={0} speed={2}>
+          <Text3D
+            font={'/Inter_Bold.json'}
+            bevelEnabled
+            bevelSize={0.05}
+            fontSize={1.5}
+            color={'#EC2D2D'}
+          >
+            Software Engineer
+            <meshNormalMaterial />
+          </Text3D>
+        </Float>
+      </Center>
+    </React.Suspense>
+  );
+}
 
 export default Home;
