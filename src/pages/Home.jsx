@@ -62,7 +62,7 @@ const Home = () => {
         {View}
       </span>
       <Canvas dpr={[1.5, 2]} linear shadows>
-        <PerspectiveCamera makeDefault position={[0, 0, 16]} fov={75}>
+        <PerspectiveCamera makeDefault position={[0, 0, 50]} fov={75}>
           <pointLight intensity={1} position={[-10, -25, -10]} />
           <spotLight
             castShadow
